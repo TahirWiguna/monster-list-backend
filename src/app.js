@@ -3,10 +3,10 @@ const app = express()
 const port = process.env.PORT || 3001
 const cors = require("cors")
 
-var corsOptions = {
-  origin: "http://localhost:8081",
-}
-app.use(cors(corsOptions))
+// var corsOptions = {
+//   origin: "http://localhost:3000",
+// }
+app.use(cors())
 
 const myExpress = Object.create(express().response, {
   data: {

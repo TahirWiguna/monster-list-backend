@@ -140,10 +140,12 @@ exports.login = (req, res) => {
   const password = req.body.password
   var condition = username ? { username } : null
 
-  User.findOne({ where: condition })
+  User.findOne({
+    where: condition,
+  })
     .then((data) => {
       if (!data || data.password !== password) {
-        res.status(404).send({
+        res.status(400).send({
           message: "Invalid username/password.",
         })
         return
@@ -199,6 +201,37 @@ exports.logout = (req, res) => {
 
       res.send({
         message: "Logout successful.",
+      })
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error retrieving User with id = " + id,
+      })
+    })
+}
+
+exports.logoutAll = (req, res) => {
+  const token = req.header("Authorization").replace("Bearer ", "")
+  const user = User.findOne({
+    where: { tokens: { [Op.contains]: [token] } },
+  })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: "Invalid token.",
+        })
+        return
+      }
+
+      User.update(
+        { tokens: [] },
+        {
+          where: { id: data.id },
+        }
+      )
+
+      res.send({
+        message: "All device has been logouted successfully.",
       })
     })
     .catch((err) => {

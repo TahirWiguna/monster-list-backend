@@ -32,5 +32,12 @@ module.exports = (sequelize, Sequelize) => {
       defaultValue: [],
     },
   })
+
+  User.prototype.toJSON = function () {
+    var values = Object.assign({}, this.get())
+
+    delete values.tokens
+    return values
+  }
   return User
 }
