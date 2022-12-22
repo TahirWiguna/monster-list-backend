@@ -167,8 +167,8 @@ exports.login = (req, res) => {
       )
 
       res.send({
-        token: token,
-        user: data,
+        token,
+        userData: data,
       })
     })
     .catch((err) => {
